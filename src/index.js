@@ -2,11 +2,13 @@
 
 const nombre = document.getElementById('nombre')
 const precioOri = document.getElementById('original-price')
-const precioDes = document.getElementById('descount-price')
+const precioDes = document.getElementById('discount-price')
 const stars = document.getElementById('stars')
 const acepto = document.getElementById('acepto')
-const km = document.getElementById('kilometros')
-const fuel = document.getElementById('fuel')
+const kilom = document.getElementById('kilometros')
+const fuelInput = document.getElementById('fuel')
+
+const REGEXP_PHOTO = '^.*\.(png|jpg|jpeg|webp)$'
 
 showCars(products)
 
@@ -36,17 +38,17 @@ window.addEventListener('load', function() {
         }
 
 
-        if(!formNewcar.checkValidity()){
+        if(!document.getElementById('new-prod').checkValidity()){
             
             nombre.nextElementSibling.textContent = nombre.validationMessage;
             precioOri.nextElementSibling.textContent = precioOri.validationMessage;
             precioDes.nextElementSibling.textContent = precioDes.validationMessage;
             stars.nextElementSibling.textContent = stars.validationMessage;
             acepto.nextElementSibling.textContent = acepto.validationMessage;
-            km.nextElementSibling.textContent = km.validationMessage
+            kilom.nextElementSibling.textContent = kilom.validationMessage
             photo.nextElementSibling.textContent = photo.validationMessage;
             document.getElementById('spanerror-radio').textContent = manGear.validationMessage;
-            fuel.nextElementSibling.textContent = fuel.validationMessage
+            fuelInput.nextElementSibling.textContent = fuelInput.validationMessage
 
             return;
         }
@@ -59,20 +61,20 @@ window.addEventListener('load', function() {
         }
         
         const name = nombre.value
-        const km = Number(km.value)
+        const km = Number(kilom.value)
         const original_price = Number(precioOri.value)
         const discount_price = Number(precioDes.value)
-        const fuel = Number(fuel.value)
+        const fuel = Number(fuelInput.value)
         const sale = false;
         const star = Number(stars.value)
         const manual_gear = gear
-        removeAllChildNodes(productos)
+        removeAllChildNodes(document.getElementById('products'))
         if(discount_price > 0){
-        addCoche({name,km,original_price,discount_price,fuel,sale,star,fuel,manual_gear})
+        addCoche({name,km,original_price,discount_price,fuel,sale,star,manual_gear})
         showCars(products)
         return
         }
-        addCoche({name,km,original_price,fuel,sale,star,fuel,manual_gear})
+        addCoche({name,km,original_price,fuel,sale,star,manual_gear})
         showCars(products)
     })
     
@@ -173,22 +175,22 @@ window.addEventListener('load', function() {
     })
 
     document.getElementById('kilometros').addEventListener('blur',function() {
-        km.setCustomValidity("")
-        if (!km.checkValidity()) {
-            if (km.validity.valueMissing) {
-                km.setCustomValidity("Debes introducir un número de kilometros")
+        kilom.setCustomValidity("")
+        if (!kilom.checkValidity()) {
+            if (kilom.validity.valueMissing) {
+                kilom.setCustomValidity("Debes introducir un número de kilometros")
             }
             
-            if (km.validity.rangeUnderflow) {
-                km.setCustomValidity("Debes introducir un número positivo")
+            if (kilom.validity.rangeUnderflow) {
+                kilom.setCustomValidity("Debes introducir un número positivo")
             }
 
   
         } else {
-            km.setCustomValidity("")
+            kilom.setCustomValidity("")
         }
-        let spanError = km.nextElementSibling
-        spanError.innerHTML = km.validationMessage
+        let spanError = kilom.nextElementSibling
+        spanError.innerHTML = kilom.validationMessage
     })
 
     document.getElementById('acepto').addEventListener('blur',function() {
@@ -281,8 +283,8 @@ function toCurrency(amount) {
 
 function addCoche(newCar){
     products.push(newCar)
-    formulario.classList.add('hide')
-    coches.classList.remove('hide')
+    document.getElementById('form').classList.add('hide')
+    document.getElementById('productos').classList.remove('hide')
 }
 
 function removeAllChildNodes(parent) {
